@@ -1,29 +1,8 @@
-[4:31 p. m., 15/11/2024] Naty: #include <WiFiClientSecure.h>
+#include <WiFiClientSecure.h>
 #include <WiFi.h>
 #include <PubSubClient.h>
 #include <ArduinoJson.h>
 #include <ESP32Servo.h>
-
-#define SERVO_PIN 18
-Servo servo;
-
-const char * WIFI_SSID = "iPhone de Marco";
-const char * WIFI_PASS = "12345678";
-
-const char * MQTT_BROKER_HOST = "aknspsbqjz9vb-ats.iot.us-east-2.amazonaws.com";
-const int MQTT_BROKER_PORT = 8883;
-
-const char * MQTT_CLIENT_ID = "ESP-32";                                               // Unique CLIENT_ID
-
-const char * UPDATE_TOPIC = "$aws/things/esp32/shadow/update";              // publish
-const char * SUBSCRIBE_TOPIC = "$aws/things/esp32/shadow/update/delta";  // subscribe
-
-const char AMAZON_ROOT_CA1[] PROGMEM = R"EOF(
-
-
------BEGIN CERTIFICATE-----
-MIIDQTCCAimgAwIBAgITBmyfz5m/jAo54vB4ikPmljZbyjANBgkqh…
-[8:35 p. m., 15/11/2024] Naty: #include <ESP32Servo.h>
 
 #define SERVO_PIN 18
 Servo servo;
