@@ -8,10 +8,10 @@
 Servo servo;
 
 
-unsigned int lastDoorStatus = 0; // Último estado conocido de la puerta
+ // Último estado conocido de la puerta
 
-const char * WIFI_SSID = "iPhone de Naty";
-const char * WIFI_PASS = "123456NAP";
+const char * WIFI_SSID = "Familia Guzman";
+const char * WIFI_PASS = "cato135790";
 
 const char * MQTT_BROKER_HOST = "aknspsbqjz9vb-ats.iot.us-east-2.amazonaws.com";
 const int MQTT_BROKER_PORT = 8883;
@@ -116,7 +116,7 @@ char outputBuffer[128];
 unsigned int DOOR_STATUS = 0;  // Estado de la puerta (0: cerrado, 1: abierto)
 int echoPin = 27;  // Pin del sensor echo
 int triggerPin = 26;  // Pin de trig del sensor
-float DISTANCE = 0;  // Distancia medida
+float DISTANCE = 0.00;  // Distancia medida
 
 // Función para levantar el servo (simulando giro hacia adelante)
 void liftServo() {
@@ -157,19 +157,21 @@ void reportdoor() {
   mqttClient.publish(UPDATE_TOPIC, outputBuffer);
 }
 
-void door() {
-  if (DOOR_STATUS != lastDoorStatus) {
-    if (DOOR_STATUS == 0) {  // Estado "abierto"
+void door() 
+{
+  if (DOOR_STATUS == 1) 
+    {  // Estado "abierto"
       digitalWrite(LED, HIGH);
       liftServo();
-    } else {  // Estado "cerrado"
+    } 
+  else 
+    {  // Estado "cerrado"
       digitalWrite(LED, LOW);
       lowerServo();
     }
-    lastDoorStatus = DOOR_STATUS;
-    delay(500);
-  }
+  delay(500);
   reportdoor();
+
 }
 
 void callback(const char * topic, byte * payload, unsigned int length) {
@@ -219,19 +221,18 @@ void setup() {
   }
 }
 
-unsigned long previousPublishMillis = 0;
-float previousDistance = 0.0;
+
+float previousDistance = 0.00;
 
 void loop() {
   DISTANCE = 0.01723 * readUltrasonicDistance(triggerPin, echoPin);
-  Serial.print("DISTANCE*: ");
-  Serial.println(DISTANCE);
+  
+  
 
-  if (mqttClient.connected()) {
-    unsigned long now = millis();
-    if (now - previousPublishMillis >= 500) {
-      previousPublishMillis = now;
-      if (DISTANCE < 10 && DISTANCE != previousDistance) {
+  if (mqttClient.connected()) 
+  {
+    if (DISTANCE != previousDistance) 
+    {
         previousDistance = DISTANCE;
         outputDoc["state"]["reported"]["DISTANCIA"] = DISTANCE;
         serializeJson(outputDoc, outputBuffer);
@@ -239,7 +240,6 @@ void loop() {
         Serial.print("DISTANCE: ");
         Serial.println(DISTANCE);
       }
-    }
     mqttClient.loop();
   } else {
     if (mqttClient.connected()) {
